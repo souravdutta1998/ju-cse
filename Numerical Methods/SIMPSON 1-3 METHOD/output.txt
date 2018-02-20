@@ -1,0 +1,14 @@
+Enter the lower bound, upper bound and precision:                                                                                              
+0                                                                                                                                              
+1                                                                                                                                              
+0.000001                                                                                                                                       
+                                                                                                                                               
+Iterations      Partitions      Previous Sum    Current Sum     Error                                                                          
+                                                                                                                                               
+1               2               0.694445        0.693254        0.001191                                                                       
+2               4               0.693254        0.693155        0.000099                                                                       
+3               8               0.693155        0.693148        0.000007                                                                       
+4               16              0.693148        0.693147        0.000000                                                                       
+                                                                                                                                               
+                                                                                                                                               
+Value of the integral =0.693147 
