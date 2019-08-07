@@ -1,0 +1,41 @@
+void swap(int &a, int &b) {
+    int temp = b;
+    b = a;
+    a = temp;
+}
+
+void MainWindow::on_bresenhamLine_clicked()
+{
+    int x1 = p1.x()/gridsize;
+    int y1 = p1.y()/gridsize;
+    int x2 = p2.x()/gridsize;
+    int y2 = p2.y()/gridsize;
+    int dx = fabs(x2 - x1);
+    int dy = fabs(y2 - y1);
+
+    int xinc = (x1 > x2 ? -1 : 1);
+    int yinc = (y1 > y2 ? -1 : 1);
+    bool flag = 1;
+    int x = x1*gridsize + gridsize/2;
+    int y = y1*gridsize + gridsize/2;
+    if(dy > dx) { // if slope > 1, then swap
+        swap(dx,dy);
+        swap(x,y);
+        swap(xinc,yinc);
+        flag = 0;
+    }
+    int decision = 2*dy - dx;
+    int step = dx;
+    for(int i=0;i<=step;i++) {
+        if(flag) point(x,y);
+        else point(y,x);
+        if(decision < 0) {
+            x += xinc*gridsize;
+            decision += 2*dy;
+        } else {
+            x += xinc*gridsize;
+            y += yinc*gridsize;
+            decision += 2*dy - 2*dx;
+        }
+    }
+}

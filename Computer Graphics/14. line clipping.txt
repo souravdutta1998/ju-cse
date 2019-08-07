@@ -1,0 +1,168 @@
+// ----------------------------------------------CLIPPING-----------------------------------------------
+int clipper_points[4][2];
+void MainWindow::on_setcorner1_clicked()
+{
+    cp1.setX((ui->frame->x/gridsize)*gridsize+gridsize/2);
+    cp1.setY((ui->frame->y/gridsize)*gridsize+gridsize/2);
+}
+
+void MainWindow::on_setcorner2_clicked()
+{
+    cp2.setX((ui->frame->x/gridsize)*gridsize+gridsize/2);
+    cp2.setY((ui->frame->y/gridsize)*gridsize+gridsize/2);
+
+    clipper_points[0][0]=cp1.x();
+    clipper_points[0][1]=cp1.y();
+    clipper_points[1][0]=cp1.x();
+    clipper_points[1][1]=cp2.y();
+    clipper_points[2][0]=cp2.x();
+    clipper_points[2][1]=cp2.y();
+    clipper_points[3][0]=cp2.x();
+    clipper_points[3][1]=cp1.y();
+
+    draw_Window();
+}
+
+void MainWindow::draw_Window()
+{
+    p1.setX(clipper_points[0][0]);
+    p1.setY(clipper_points[0][1]);
+    p2.setX(clipper_points[1][0]);
+    p2.setY(clipper_points[1][1]);
+    DDAline(0,255,255);
+
+    p1.setX(clipper_points[1][0]);
+    p1.setY(clipper_points[1][1]);
+    p2.setX(clipper_points[2][0]);
+    p2.setY(clipper_points[2][1]);
+    DDAline(0,255,255);
+
+    p1.setX(clipper_points[2][0]);
+    p1.setY(clipper_points[2][1]);
+    p2.setX(clipper_points[3][0]);
+    p2.setY(clipper_points[3][1]);
+    DDAline(0,255,255);
+
+    p1.setX(clipper_points[3][0]);
+    p1.setY(clipper_points[3][1]);
+    p2.setX(clipper_points[0][0]);
+    p2.setY(clipper_points[0][1]);
+    DDAline(0,255,255);
+}
+// ************************** LINE CLIPPING ********************************
+// Defining region codes
+const int INSIDE = 0; // 0000
+const int LEFT = 1;   // 0001
+const int RIGHT = 2;  // 0010
+const int BOTTOM = 4; // 0100
+const int TOP = 8;    // 1000
+
+
+// Function to compute region code for a point(x, y)
+int MainWindow::computeCode(int xa, int ya)
+{
+    int x_min=cp1.x(),x_max=cp2.x(),y_min=cp1.y(),y_max=cp2.y();
+
+    // initialized as being inside
+        int code = INSIDE;
+        if (xa < x_min)       // to the left of rectangle
+            code |= LEFT;
+        else if (xa > x_max)  // to the right of rectangle
+            code |= RIGHT;
+        if (ya < y_min)       // below the rectangle
+            code |= BOTTOM;
+        else if (ya > y_max)  // above the rectangle
+            code |= TOP;
+
+        return code;
+}
+// Implementing Cohen-Sutherland algorithm
+// Clipping a line from P1 = (x2, y2) to P2 = (x2, y2)
+void MainWindow::cohenSutherlandClip(int x1, int y1,int x2, int y2)
+{
+    int x_min=clipper_points[0][0],x_max=clipper_points[2][0],y_min=clipper_points[0][1],y_max=clipper_points[2][1];
+
+    int code1 = computeCode(x1, y1);
+    int code2 = computeCode(x2, y2);
+
+    bool accept = false;
+
+    while (true)
+    {
+
+        if ((code1 == 0) && (code2 == 0))
+        {
+            break;
+        }
+        else if (code1 & code2)
+        {
+            break;
+        }
+        else
+        {
+            int code_out;
+            int x, y;
+
+            if (code1 != 0)
+                code_out = code1;
+            else
+                code_out = code2;
+
+            if (code_out & TOP)
+            {
+                x = x1 + (int)((double)(x2 - x1) *(double)(y_max - y1) /(double)(y2 - y1));
+                y = y_max;
+            }
+            else if (code_out & BOTTOM)
+            {
+                x = x1 + (int)((double)(x2 - x1) * (double)(y_min - y1) / (double)(y2 - y1));
+                y = y_min;
+            }
+            else if (code_out & RIGHT)
+            {
+                y = y1 + (int)((double)(y2 - y1) * (double)(x_max - x1) / (double)(x2 - x1));
+                x = x_max;
+            }
+            else if (code_out & LEFT)
+            {
+                y = y1 + (int)((double)(y2 - y1) * (double)(x_min - x1) / (double)(x2 - x1));
+                x = x_min;
+            }
+
+            if (code_out == code1)
+            {
+                x1 = x;
+                y1 = y;
+                code1 = computeCode(x1, y1);
+            }
+            else
+            {
+                x2 = x;
+                y2 = y;
+                code2 = computeCode(x2, y2);
+            }
+        }
+    }
+    if (accept)
+    {
+
+        p1.setX(x1);
+        p1.setY(y1);
+
+        p2.setX(x2);
+        p2.setY(y2);
+
+        DDAline(255,255,255);
+        draw_Window();
+    }
+    else
+    {
+        draw_Window();
+    }
+
+}
+void MainWindow::on_lineclipping_clicked()
+{
+    DDAline(0,0,0);
+    cohenSutherlandClip(p1.x(),p1.y(),p2.x(),p2.y());
+}

@@ -1,0 +1,33 @@
+void MainWindow::on_bresenhamCircle_clicked()
+{
+    int r = ui->radiusspinbox->value();
+    p1.setX(ui->frame->x);
+    p1.setY(ui->frame->y);
+
+    int x0 = p1.x()/gridsize;
+    int y0 = p1.y()/gridsize;
+    x0 = x0*gridsize + gridsize/2;
+    y0 = y0*gridsize + gridsize/2;
+
+    int x = 0;
+    int y = r*gridsize;
+    int p = (3 - 2*r)*gridsize;
+    while(y > x) {
+        point(x0 - x, y0 - y);
+        point(x0 + x, y0 - y);
+        point(x0 - x, y0 + y);
+        point(x0 + x, y0 + y);
+        point(x0 - y, y0 - x);
+        point(x0 + y, y0 - x);
+        point(x0 - y, y0 + x);
+        point(x0 + y, y0 + x);
+
+        x += gridsize;
+        if(p <= 0) {
+            p += 4*x + 6;
+        } else {
+            p += 4*(x-y) + 10;
+            y -= gridsize;
+        }
+    }
+}

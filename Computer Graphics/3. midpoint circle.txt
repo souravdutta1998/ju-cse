@@ -1,0 +1,33 @@
+void MainWindow::on_midPointCircle_clicked()
+{
+    int r = ui->radiusspinbox->value();
+    p1.setX(ui->frame->x);
+    p1.setY(ui->frame->y);
+
+    int x0 = p1.x()/gridsize;
+    int y0 = p1.y()/gridsize;
+    x0 = x0*gridsize + gridsize/2;
+    y0 = y0*gridsize + gridsize/2;
+
+    int x = r*gridsize;
+    int y = 0;
+    int p = (1 - r)*gridsize;
+    while(x > y) {
+        point(x0 - x, y0 - y);
+        point(x0 + x, y0 - y);
+        point(x0 - x, y0 + y);
+        point(x0 + x, y0 + y);
+        point(x0 - y, y0 - x);
+        point(x0 + y, y0 - x);
+        point(x0 - y, y0 + x);
+        point(x0 + y, y0 + x);
+
+        y += gridsize;
+        if(p <= 0) {
+            p += 2*y + 1;
+        } else {
+            p += 2*y + 1 - 2*x;
+            x -= gridsize;
+        }
+    }
+}

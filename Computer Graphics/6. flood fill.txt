@@ -1,0 +1,21 @@
+void MainWindow::floodfillutil(int x, int y, int r, int g, int b) {
+    if(x < 0 || y < 0 || x >= img.width() || y >= img.height()) return;
+    if(img.pixel(x,y) == qRgb(r,g,b)) return;
+    point(x,y,r,g,b);
+    floodfillutil(x - gridsize, y, r,g,b);
+    floodfillutil(x + gridsize, y, r,g,b);
+    floodfillutil(x, y - gridsize, r,g,b);
+    floodfillutil(x, y + gridsize, r,g,b);
+}
+
+void MainWindow::on_floodfill_clicked()
+{
+    p1.setX(ui->frame->x);
+    p1.setY(ui->frame->y);
+    int x = p1.x()/gridsize;
+    int y = p1.y()/gridsize;
+    x = x*gridsize + gridsize/2;
+    y = y*gridsize + gridsize/2;
+    point(x,y,0,0,0);
+    floodfillutil(x,y,255,255,0);
+}

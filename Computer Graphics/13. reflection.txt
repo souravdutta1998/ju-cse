@@ -1,0 +1,38 @@
+void MainWindow::poly_draw(std::vector<std::pair<int,int> > vlist, int r, int g, int b) {
+    for(int i=0;i<vlist.size()-1;i++)
+    {
+        p1.setX(vlist[i].first); p1.setY(vlist[i].second);
+        p2.setX(vlist[i+1].first); p2.setY(vlist[i+1].second);
+        DDAline(r,g,b);
+    }
+}
+void mat_mult(double a[3][3], int b[3], double res[3]){
+    int i,j;
+    for(i=0;i<3;i++){
+        res[i]=0;
+        for(j=0;j<3;j++)
+            res[i]+=(a[i][j]*b[j]);
+    }
+}
+
+void MainWindow::on_reflection_clicked()
+{
+    int i,len=vertex_list.size();
+
+    double dx=p1.x()-p2.x();
+    double dy=p1.y()-p2.y();
+
+    double a=-dy;
+    double b=dx;
+    double c=p1.x()*dy-p1.y()*dx;
+
+    for(i=0;i<len;i++)
+    {
+        int x1=vertex_list[i].first;
+        int y1=vertex_list[i].second;
+
+        vertex_list[i].first=(int)((double)x1-(double)(2*a*(a*x1+b*y1+c))/(double)((a*a+b*b)));
+        vertex_list[i].second=(int)((double)y1-(double)(2*b*(a*x1+b*y1+c))/(double)((a*a+b*b)));
+    }
+    poly_draw(vertex_list,255,255,255);
+}

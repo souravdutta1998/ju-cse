@@ -1,0 +1,31 @@
+void MainWindow::on_DDALine_clicked()
+{
+    DDAline(255,255,0);
+}
+
+void MainWindow::DDAline(int r, int g, int b) {
+    double x1 = p1.x()/gridsize;
+    double y1 = p1.y()/gridsize;
+    double x2 = p2.x()/gridsize;
+    double y2 = p2.y()/gridsize;
+    double xinc, yinc, step;
+    double slope = fabs(y2-y1)/fabs(x2-x1);
+    if(slope  <= 1.00) {
+        xinc = 1;
+        yinc = slope;
+        step = fabs(x2 - x1);
+    } else {
+        xinc = 1/slope;
+        yinc = 1;
+        step = fabs(y2 - y1);
+    }
+    if(x1 > x2) xinc *= -1;
+    if(y1 > y2) yinc *= -1;
+    double x = x1*gridsize + gridsize/2;
+    double y = y1*gridsize + gridsize/2;
+    for(int i=0;i<=step;i++) {
+        point(x,y,r,g,b);
+        x += xinc * gridsize;
+        y += yinc * gridsize;
+    }
+}

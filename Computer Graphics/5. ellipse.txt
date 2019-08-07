@@ -1,0 +1,67 @@
+void MainWindow::on_ellipse_clicked()
+{
+    p1.setX(ui->frame->x);
+    p1.setY(ui->frame->y);
+    int rx = ui->r1spinbox->value();
+    int ry = ui->r2spinbox->value();
+    int x_centre=p1.x();
+    int y_centre=p1.y();
+    int k = ui->gridspinbox->value();//GridSize
+
+    x_centre=(x_centre/k)*k+k/2;
+    y_centre=(y_centre/k)*k+k/2;
+
+    int x=0;
+    int y=ry;
+
+    int rx2=rx*rx;
+    int ry2=ry*ry;
+    int tworx2=2*rx2;
+    int twory2=2*ry2;
+    int px=0.0;
+    int py=tworx2*y;
+    //For first region
+    int p1=ry2-rx2*ry+(0.25)*rx2; //Initial value of decision paramemter
+
+    while(px<py)
+    {
+        point(x_centre+x*k,y_centre+y*k);
+        point(x_centre-x*k,y_centre+y*k);
+        point(x_centre-x*k,y_centre-y*k);
+        point(x_centre+x*k,y_centre-y*k);
+
+        x++;
+        px+=twory2;
+        if(p1>=0) {
+            y--;
+            py-=tworx2;
+            p1=p1+ry2+px-py;
+
+        }  else{
+            p1=p1+ry2+px;
+        }
+    }
+
+    //For second region
+    p1=ry2*((double)x+0.5)*((double)x+0.5)+rx2*(y-1)*(y-1)-rx2*ry2; //Initial value of decision paramemter
+
+
+    while(y>=0)
+    {
+        point(x_centre+x*k,y_centre+y*k);
+        point(x_centre-x*k,y_centre+y*k);
+        point(x_centre-x*k,y_centre-y*k);
+        point(x_centre+x*k,y_centre-y*k);
+
+        y--;
+        py-=tworx2;
+        if(p1<=0){
+            x++;
+            px+=twory2;
+            p1=p1+rx2-py+px;
+
+        }  else  {
+            p1=p1+rx2-py;
+        }
+    }
+}

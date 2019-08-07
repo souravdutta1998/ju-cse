@@ -1,0 +1,51 @@
+void MainWindow::poly_draw(std::vector<std::pair<int,int> > vlist, int r, int g, int b) {
+    for(int i=0;i<vlist.size()-1;i++)
+    {
+        p1.setX(vlist[i].first); p1.setY(vlist[i].second);
+        p2.setX(vlist[i+1].first); p2.setY(vlist[i+1].second);
+        DDAline(r,g,b);
+    }
+}
+void mat_mult(double a[3][3], int b[3], double res[3]){
+    int i,j;
+    for(i=0;i<3;i++){
+        res[i]=0;
+        for(j=0;j<3;j++)
+            res[i]+=(a[i][j]*b[j]);
+    }
+}
+
+void MainWindow::on_shearing_clicked()
+{
+    int shx = ui->xshear->value();
+    int shy = ui->yshear->value();
+    gridsize = ui->gridspinbox->value();
+
+    std::vector<std::pair<int,int> > old_vertex;
+    for(int i=0;i<vertex_list.size();i++)
+    {
+        old_vertex.push_back(vertex_list[i]);
+    }
+
+    //Point about which to be scaled
+    int piv_x=(ui->frame->x/gridsize)*gridsize+gridsize/2;
+    int piv_y=(ui->frame->y/gridsize)*gridsize+gridsize/2;
+
+    int i,len=vertex_list.size();
+
+    // matrix for shearing
+    double mat[3][3]={{1,shx,0},{shy,1,0},{0,0,1}};
+    int coord[3];
+    double res[3];
+    for(i=0;i<len;i++)
+    {
+        coord[0]=vertex_list[i].first-piv_x;
+        coord[1]=piv_y-vertex_list[i].second;
+        coord[2]=1;
+        mat_mult(mat,coord,res);
+        vertex_list[i].first=res[0]/res[2]+piv_x;
+        vertex_list[i].second=piv_y-res[1]/res[2];
+    }
+    poly_draw(old_vertex,0,0,0);
+    poly_draw(vertex_list,255,255,0);
+}

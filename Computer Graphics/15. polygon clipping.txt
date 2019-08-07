@@ -1,0 +1,198 @@
+// ----------------------------------------------CLIPPING-----------------------------------------------
+int clipper_points[4][2];
+void MainWindow::on_setcorner1_clicked()
+{
+    cp1.setX((ui->frame->x/gridsize)*gridsize+gridsize/2);
+    cp1.setY((ui->frame->y/gridsize)*gridsize+gridsize/2);
+}
+
+void MainWindow::on_setcorner2_clicked()
+{
+    cp2.setX((ui->frame->x/gridsize)*gridsize+gridsize/2);
+    cp2.setY((ui->frame->y/gridsize)*gridsize+gridsize/2);
+
+    clipper_points[0][0]=cp1.x();
+    clipper_points[0][1]=cp1.y();
+    clipper_points[1][0]=cp1.x();
+    clipper_points[1][1]=cp2.y();
+    clipper_points[2][0]=cp2.x();
+    clipper_points[2][1]=cp2.y();
+    clipper_points[3][0]=cp2.x();
+    clipper_points[3][1]=cp1.y();
+
+    draw_Window();
+}
+
+void MainWindow::draw_Window()
+{
+    p1.setX(clipper_points[0][0]);
+    p1.setY(clipper_points[0][1]);
+    p2.setX(clipper_points[1][0]);
+    p2.setY(clipper_points[1][1]);
+    DDAline(0,255,255);
+
+    p1.setX(clipper_points[1][0]);
+    p1.setY(clipper_points[1][1]);
+    p2.setX(clipper_points[2][0]);
+    p2.setY(clipper_points[2][1]);
+    DDAline(0,255,255);
+
+    p1.setX(clipper_points[2][0]);
+    p1.setY(clipper_points[2][1]);
+    p2.setX(clipper_points[3][0]);
+    p2.setY(clipper_points[3][1]);
+    DDAline(0,255,255);
+
+    p1.setX(clipper_points[3][0]);
+    p1.setY(clipper_points[3][1]);
+    p2.setX(clipper_points[0][0]);
+    p2.setY(clipper_points[0][1]);
+    DDAline(0,255,255);
+}
+// *********************** POLYGON CLIPPING *************************************
+const int MAX_POINTS = 20;
+
+// Returns x-value of point of intersectipn of two
+// lines
+int MainWindow::x_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4)
+{
+    y1=ui->frame->height()-y1+1;
+    y2=ui->frame->height()-y2+1;
+    y3=ui->frame->height()-y3+1;
+    y4=ui->frame->height()-y4+1;
+    int num = (x1*y2 - y1*x2) * (x3-x4) -
+              (x1-x2) * (x3*y4 - y3*x4);
+    int den = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
+    int retx=num/den;
+    return retx;
+}
+
+// Returns y-value of point of intersectipn of
+// two lines
+int MainWindow:: y_intersect(int x1, int y1, int x2, int y2,int x3, int y3, int x4, int y4)
+{
+    y1=ui->frame->height()-y1+1;
+    y2=ui->frame->height()-y2+1;
+    y3=ui->frame->height()-y3+1;
+    y4=ui->frame->height()-y4+1;
+    int num = (x1*y2 - y1*x2) * (y3-y4) -
+              (y1-y2) * (x3*y4 - y3*x4);
+    int den = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
+    int rety= (ui->frame->height()-num/den+1);
+    return rety;
+}
+
+// This functions clips all the edges w.r.t one clip
+// edge of clipping area
+void MainWindow:: clip(int x1, int y1, int x2, int y2)
+{
+    int poly_size=vertex_list.size()-1;
+    int new_poly_size = 0;
+
+    std::vector<std::pair<int,int> > new_points;
+
+    // (ix,iy),(kx,ky) are the co-ordinate values of
+    // the points
+    for (int i = 0; i < poly_size; i++)
+    {
+        // i and k form a line in polygon
+        int k = (i+1) % poly_size;
+        int ix = vertex_list[i].first, iy = vertex_list[i].second;
+        int kx = vertex_list[k].first, ky = vertex_list[k].second;
+
+        // Calculating position of first and second point
+
+        int i_pos,k_pos;
+        if(x2==x1 && ix>x1) i_pos=1;
+        else if(x2==x1 && ix<x1) i_pos=-1;
+        else if(y2==y1 && iy<y1) i_pos=1;
+        else i_pos=-1;
+
+        if(x2==x1 && kx>x1) k_pos=1;
+        else if(x2==x1 && kx<x1) k_pos=-1;
+        else if(y2==y1 && ky<y1) k_pos=1;
+        else k_pos=-1;
+
+        if(y1>y2||x1>x2)
+        {
+            i_pos=(-1)*i_pos;
+            k_pos=(-1)*k_pos;
+        }
+
+        // Case 1 : When both points are inside
+        if (i_pos >= 0  && k_pos >= 0)
+        {
+            //Only second point is added
+            new_points.push_back(std::make_pair(kx,ky));
+            new_poly_size++;
+        }
+
+        // Case 2: When only first point is outside
+        else if (i_pos < 0  && k_pos >= 0)
+        {
+            // Point of intersection with edge
+            // and the second point is added
+
+            new_points.push_back(std::make_pair(x_intersect(x1,y1, x2, y2, ix, iy, kx, ky),y_intersect(x1,y1, x2, y2, ix, iy, kx, ky)));
+            new_poly_size++;
+
+            new_points.push_back(std::make_pair(kx,ky));
+            new_poly_size++;
+        }
+
+        // Case 3: When only second point is outside
+        else if (i_pos >= 0  && k_pos < 0)
+        {
+            //Only point of intersection with edge is added
+
+            new_points.push_back(std::make_pair(x_intersect(x1,y1, x2, y2, ix, iy, kx, ky),y_intersect(x1,y1, x2, y2, ix, iy, kx, ky)));
+            new_poly_size++;
+        }
+
+        // Case 4: When both points are outside
+        else
+        {
+            //No points are added
+        }
+    }
+
+    // Copying new points into original array
+    // and changing the no. of vertices
+    poly_size = new_poly_size;
+    vertex_list.clear();
+    for (int i = 0; i < new_points.size(); i++)
+    {
+        vertex_list.push_back(new_points[i]);
+    }
+    vertex_list.push_back(new_points[0]);
+}
+
+// Implements Sutherland–Hodgman algorithm
+void MainWindow::suthHodgClip()
+{
+    std::vector<std::pair<int,int> > old_vertex;
+    for(int i=0;i<vertex_list.size();i++)
+    {
+        old_vertex.push_back(vertex_list[i]);
+    }
+    int clipper_size=4;
+    //i and k are two consecutive indexes
+    for (int i=0; i<clipper_size; i++)
+    {
+        int k = (i+1) % clipper_size;
+
+        // We pass the current array of vertices, it's size
+        // and the end points of the selected clipper line
+        clip(clipper_points[i][0],
+             clipper_points[i][1], clipper_points[k][0],
+             clipper_points[k][1]);
+    }
+
+    poly_draw(old_vertex,0,0,0);
+    poly_draw(vertex_list,255,255,255);
+    draw_Window();
+}
+void MainWindow::on_polygonclipping_clicked()
+{
+    suthHodgClip();
+}
