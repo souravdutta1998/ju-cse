@@ -1,0 +1,304 @@
+C:\Users\SOURAV\Desktop\compiler-design\project>a
+Input the filename which contains grammar : grammar.txt
+After removing left recursion, The production rules are:
+P -> program ProgramName ; BlockBody
+ProgramName -> id
+BlockBody -> LibraryDef ConstantDef VariableDef FuncDef begin MainBody end .
+LibraryDef -> epsilon  | uses id LibraryDef'
+LibraryDef' -> , id LibraryDef'  | ;
+ConstantDef -> const Const_Def  | epsilon
+Const_Def -> id = Numeral ; C
+C -> epsilon  | id = Numeral ; C
+VariableDef -> epsilon  | var Var_Def V
+V -> Var_Def V  | epsilon
+Var_Def -> VarList : Id_Type ;
+VarList -> id VarList'
+VarList' -> , id VarList'  | epsilon
+Id_Type -> integer  | real
+FuncDef -> epsilon  | function id ( FuncArgmt ) : Id_Type Local_Decl begin Statement end ; FuncDef
+FuncArgmt -> epsilon  | id VarList' : Id_Type X
+X -> , FuncArgmt  | epsilon
+Local_Decl -> epsilon  | var Var_Def V
+Statement -> Assign_Stmt ; Statement  | Cond_Stmt  | IfElse_Stmt  | Input_Stmt ; Statement  | Output_Stmt ; Statement  | epsilon
+Input_Stmt -> get id
+Output_Stmt -> put id
+Cond_Stmt -> ( Condition ) ? Statement : Statement
+Assign_Stmt -> id = expression
+expression -> term expression'
+expression' -> addsubop term expression'  | epsilon
+term -> factor term'
+term' -> * factor term'  | epsilon
+factor -> ( expression )  | Numeral  | id
+addsubop -> +  | -
+IfElse_Stmt -> if ( Condition ) then begin Statement end ElsePart Statement
+ElsePart -> else begin Statement end  | epsilon
+Condition -> ( expression ) term' expression' relop expression  | Numeral term' expression' relop expression  | id term' expression' relop expression
+relop -> <  | <=  | >  | >=
+MainBody -> ( Condition ) ? Statement : Statement  | epsilon  | get id ; Statement  | id = expression ; Statement  | if ( Condition ) then begin Statement end ElsePart Statement  | put id ; Statement
+
+Non Terminals are: Assign_Stmt BlockBody C Cond_Stmt Condition Const_Def ConstantDef ElsePart FuncArgmt FuncDef Id_Type IfElse_Stmt Input_Stmt LibraryDef LibraryDef' Local_Decl MainBody Output_Stmt P ProgramName Statement V VarList VarList' Var_Def VariableDef X addsubop expression expression' factor relop term term'
+
+Terminals are: ( ) * + , - . : ; < <= = > >= ? Numeral begin const else end function get id if integer program put real then uses var
+
+---------------------------------
+Symbol          FIRST Set
+---------------------------------
+(               { ( }
+)               { ) }
+*               { * }
++               { + }
+,               { , }
+-               { - }
+.               { . }
+:               { : }
+;               { ; }
+<               { < }
+<=              { <= }
+=               { = }
+>               { > }
+>=              { >= }
+?               { ? }
+Assign_Stmt             { id }
+BlockBody               { begin , const , function , uses , var }
+C               { epsilon , id }
+Cond_Stmt               { ( }
+Condition               { ( , Numeral , id }
+Const_Def               { id }
+ConstantDef             { const , epsilon }
+ElsePart                { else , epsilon }
+FuncArgmt               { epsilon , id }
+FuncDef                 { epsilon , function }
+Id_Type                 { integer , real }
+IfElse_Stmt             { if }
+Input_Stmt              { get }
+LibraryDef              { epsilon , uses }
+LibraryDef'             { , , ; }
+Local_Decl              { epsilon , var }
+MainBody                { ( , epsilon , get , id , if , put }
+Numeral                 { Numeral }
+Output_Stmt             { put }
+P               { program }
+ProgramName             { id }
+Statement               { ( , epsilon , get , id , if , put }
+V               { epsilon , id }
+VarList                 { id }
+VarList'                { , , epsilon }
+Var_Def                 { id }
+VariableDef             { epsilon , var }
+X               { , , epsilon }
+addsubop                { + , - }
+begin           { begin }
+const           { const }
+else            { else }
+end             { end }
+expression              { ( , Numeral , id }
+expression'             { + , - , epsilon }
+factor          { ( , Numeral , id }
+function                { function }
+get             { get }
+id              { id }
+if              { if }
+integer                 { integer }
+program                 { program }
+put             { put }
+real            { real }
+relop           { < , <= , > , >= }
+term            { ( , Numeral , id }
+term'           { * , epsilon }
+then            { then }
+uses            { uses }
+var             { var }
+---------------------------------
+
+---------------------------------
+Symbol          FOLLOW Set
+---------------------------------
+Assign_Stmt             { ; }
+BlockBody               { $ }
+C               { begin , function , var }
+Cond_Stmt               { : , end }
+Condition               { ) }
+Const_Def               { begin , function , var }
+ConstantDef             { begin , function , var }
+ElsePart                { ( , : , end , get , id , if , put }
+FuncArgmt               { ) }
+FuncDef                 { begin }
+Id_Type                 { ) , , , ; , begin , var }
+IfElse_Stmt             { : , end }
+Input_Stmt              { ; }
+LibraryDef              { begin , const , function , var }
+LibraryDef'             { begin , const , function , var }
+Local_Decl              { begin }
+MainBody                { end }
+Output_Stmt             { ; }
+P               { $ }
+ProgramName             { ; }
+Statement               { : , end }
+V               { begin , function }
+VarList                 { : }
+VarList'                { : }
+Var_Def                 { begin , function , id }
+VariableDef             { begin , function }
+X               { ) }
+addsubop                { ( , Numeral , id }
+expression              { ) , ; }
+expression'             { ) , ; , < , <= , > , >= }
+factor          { ) , * , + , - , ; , < , <= , > , >= }
+relop           { ( , Numeral , id }
+term            { ) , + , - , ; , < , <= , > , >= }
+term'           { ) , + , - , ; , < , <= , > , >= }
+---------------------------------
+
+Input the filename which contains tokens to be parsed : output.txt
+Token number: 1, Token: program, Message: Parsed successfully
+Token number: 2, Token: id, Message: Parsed successfully
+Token number: 3, Token: ;, Message: Parsed successfully
+Token number: 4, Token: uses, Message: Parsed successfully
+Token number: 5, Token: id, Message: Parsed successfully
+Token number: 6, Token: ,, Message: Parsed successfully
+Token number: 7, Token: id, Message: Parsed successfully
+Token number: 8, Token: ;, Message: Parsed successfully
+Token number: 9, Token: const, Message: Parsed successfully
+Token number: 10, Token: id, Message: Parsed successfully
+Token number: 11, Token: =, Message: Parsed successfully
+Token number: 12, Token: Numeral, Message: Parsed successfully
+Token number: 13, Token: ;, Message: Parsed successfully
+Token number: 14, Token: id, Message: Parsed successfully
+Token number: 15, Token: =, Message: Parsed successfully
+Token number: 16, Token: Numeral, Message: Parsed successfully
+Token number: 17, Token: ;, Message: Parsed successfully
+Token number: 18, Token: var, Message: Parsed successfully
+Token number: 19, Token: id, Message: Parsed successfully
+Token number: 20, Token: ,, Message: Parsed successfully
+Token number: 21, Token: id, Message: Parsed successfully
+Token number: 22, Token: ,, Message: Parsed successfully
+Token number: 23, Token: id, Message: Parsed successfully
+Token number: 24, Token: :, Message: Parsed successfully
+Token number: 25, Token: integer, Message: Parsed successfully
+Token number: 26, Token: ;, Message: Parsed successfully
+Token number: 27, Token: id, Message: Parsed successfully
+Token number: 28, Token: ,, Message: Parsed successfully
+Token number: 29, Token: id, Message: Parsed successfully
+Token number: 30, Token: :, Message: Parsed successfully
+Token number: 31, Token: real, Message: Parsed successfully
+Token number: 32, Token: ;, Message: Parsed successfully
+Token number: 33, Token: function, Message: Parsed successfully
+Token number: 34, Token: id, Message: Parsed successfully
+Token number: 35, Token: (, Message: Parsed successfully
+Token number: 36, Token: id, Message: Parsed successfully
+Token number: 37, Token: ,, Message: Parsed successfully
+Token number: 38, Token: id, Message: Parsed successfully
+Token number: 39, Token: :, Message: Parsed successfully
+Token number: 40, Token: real, Message: Parsed successfully
+Token number: 41, Token: ,, Message: Parsed successfully
+Token number: 42, Token: id, Message: Parsed successfully
+Token number: 43, Token: :, Message: Parsed successfully
+Token number: 44, Token: integer, Message: Parsed successfully
+Token number: 45, Token: ), Message: Parsed successfully
+Token number: 46, Token: :, Message: Parsed successfully
+Token number: 47, Token: real, Message: Parsed successfully
+Token number: 48, Token: var, Message: Parsed successfully
+Token number: 49, Token: id, Message: Parsed successfully
+Token number: 50, Token: ,, Message: Parsed successfully
+Token number: 51, Token: id, Message: Parsed successfully
+Token number: 52, Token: :, Message: Parsed successfully
+Token number: 53, Token: integer, Message: Parsed successfully
+Token number: 54, Token: ;, Message: Parsed successfully
+Token number: 55, Token: id, Message: Parsed successfully
+Token number: 56, Token: :, Message: Parsed successfully
+Token number: 57, Token: real, Message: Parsed successfully
+Token number: 58, Token: ;, Message: Parsed successfully
+Token number: 59, Token: begin, Message: Parsed successfully
+Token number: 60, Token: id, Message: Parsed successfully
+Token number: 61, Token: =, Message: Parsed successfully
+Token number: 62, Token: Numeral, Message: Parsed successfully
+Token number: 63, Token: *, Message: Parsed successfully
+Token number: 64, Token: id, Message: Parsed successfully
+Token number: 65, Token: ;, Message: Parsed successfully
+Token number: 66, Token: put, Message: Parsed successfully
+Token number: 67, Token: id, Message: Parsed successfully
+Token number: 68, Token: ;, Message: Parsed successfully
+Token number: 69, Token: end, Message: Parsed successfully
+Token number: 70, Token: ;, Message: Parsed successfully
+Token number: 71, Token: begin, Message: Parsed successfully
+Token number: 72, Token: get, Message: Parsed successfully
+Token number: 73, Token: id, Message: Parsed successfully
+Token number: 74, Token: ;, Message: Parsed successfully
+Token number: 75, Token: put, Message: Parsed successfully
+Token number: 76, Token: id, Message: Parsed successfully
+Token number: 77, Token: ;, Message: Parsed successfully
+Token number: 78, Token: id, Message: Parsed successfully
+Token number: 79, Token: =, Message: Parsed successfully
+Token number: 80, Token: id, Message: Parsed successfully
+Token number: 81, Token: *, Message: Parsed successfully
+Token number: 82, Token: (, Message: Parsed successfully
+Token number: 83, Token: id, Message: Parsed successfully
+Token number: 84, Token: *, Message: Parsed successfully
+Token number: 85, Token: (, Message: Parsed successfully
+Token number: 86, Token: id, Message: Parsed successfully
+Token number: 87, Token: -, Message: Parsed successfully
+Token number: 88, Token: Numeral, Message: Parsed successfully
+Token number: 89, Token: ), Message: Parsed successfully
+Token number: 90, Token: ), Message: Parsed successfully
+Token number: 91, Token: ;, Message: Parsed successfully
+Token number: 92, Token: if, Message: Parsed successfully
+Token number: 93, Token: (, Message: Parsed successfully
+Token number: 94, Token: id, Message: Parsed successfully
+Token number: 95, Token: >, Message: Parsed successfully
+Token number: 96, Token: id, Message: Parsed successfully
+Token number: 97, Token: ), Message: Parsed successfully
+Token number: 98, Token: then, Message: Parsed successfully
+Token number: 99, Token: begin, Message: Parsed successfully
+Token number: 100, Token: id, Message: Parsed successfully
+Token number: 101, Token: =, Message: Parsed successfully
+Token number: 102, Token: id, Message: Parsed successfully
+Token number: 103, Token: ;, Message: Parsed successfully
+Token number: 104, Token: get, Message: Parsed successfully
+Token number: 105, Token: id, Message: Parsed successfully
+Token number: 106, Token: ;, Message: Parsed successfully
+Token number: 107, Token: end, Message: Parsed successfully
+Token number: 108, Token: else, Message: Parsed successfully
+Token number: 109, Token: begin, Message: Parsed successfully
+Token number: 110, Token: id, Message: Parsed successfully
+Token number: 111, Token: =, Message: Parsed successfully
+Token number: 112, Token: id, Message: Parsed successfully
+Token number: 113, Token: ;, Message: Parsed successfully
+Token number: 114, Token: if, Message: Parsed successfully
+Token number: 115, Token: (, Message: Parsed successfully
+Token number: 116, Token: id, Message: Parsed successfully
+Token number: 117, Token: <=, Message: Parsed successfully
+Token number: 118, Token: Numeral, Message: Parsed successfully
+Token number: 119, Token: ), Message: Parsed successfully
+Token number: 120, Token: then, Message: Parsed successfully
+Token number: 121, Token: begin, Message: Parsed successfully
+Token number: 122, Token: get, Message: Parsed successfully
+Token number: 123, Token: id, Message: Parsed successfully
+Token number: 124, Token: ;, Message: Parsed successfully
+Token number: 125, Token: put, Message: Parsed successfully
+Token number: 126, Token: id, Message: Parsed successfully
+Token number: 127, Token: ;, Message: Parsed successfully
+Token number: 128, Token: end, Message: Parsed successfully
+Token number: 129, Token: end, Message: Parsed successfully
+Token number: 130, Token: (, Message: Parsed successfully
+Token number: 131, Token: id, Message: Parsed successfully
+Token number: 132, Token: >, Message: Parsed successfully
+Token number: 133, Token: id, Message: Parsed successfully
+Token number: 134, Token: ), Message: Parsed successfully
+Token number: 135, Token: ?, Message: Parsed successfully
+Token number: 136, Token: id, Message: Parsed successfully
+Token number: 137, Token: =, Message: Parsed successfully
+Token number: 138, Token: id, Message: Parsed successfully
+Token number: 139, Token: ;, Message: Parsed successfully
+Token number: 140, Token: :, Message: Parsed successfully
+Token number: 141, Token: id, Message: Parsed successfully
+Token number: 142, Token: =, Message: Parsed successfully
+Token number: 143, Token: id, Message: Parsed successfully
+Token number: 144, Token: ;, Message: Parsed successfully
+Token number: 145, Token: put, Message: Parsed successfully
+Token number: 146, Token: id, Message: Parsed successfully
+Token number: 147, Token: ;, Message: Parsed successfully
+Token number: 148, Token: end, Message: Parsed successfully
+Token number: 149, Token: ., Message: Parsed successfully
+Token number: 150, Token: $, Message: Parsed successfully
+- - - - - - - - - - - - - - - - - - - - - - - - - - - -
+RESULT : Parsed successfully! No Error is found.

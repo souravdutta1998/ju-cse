@@ -1,0 +1,59 @@
+P -> program ProgramName ; BlockBody
+ProgramName -> id
+BlockBody -> LibraryDef ConstantDef VariableDef FuncDef begin MainBody end .
+LibraryDef -> epsilon
+LibraryDef -> uses id LibraryDef'
+LibraryDef' -> , id LibraryDef'
+LibraryDef' -> ;
+ConstantDef -> const Const_Def
+ConstantDef -> epsilon
+Const_Def -> id = Numeral ; C
+C -> Const_Def
+C -> epsilon
+VariableDef -> var Var_Def V
+VariableDef -> epsilon
+V -> epsilon
+V -> Var_Def V
+Var_Def -> VarList : Id_Type ;
+VarList -> id VarList'
+VarList' -> , id VarList'
+VarList' -> epsilon
+Id_Type -> integer
+Id_Type -> real
+FuncDef -> epsilon
+FuncDef -> function id ( FuncArgmt ) : Id_Type VariableDef begin Statement end ; FuncDef
+FuncArgmt -> epsilon
+FuncArgmt -> VarList : Id_Type X
+X -> epsilon
+X -> , FuncArgmt
+FuncArgmt -> epsilon
+MainBody -> epsilon
+MainBody -> Statement
+Statement -> epsilon
+Statement -> Input_Stmt ; Statement
+Statement -> Output_Stmt ; Statement
+Statement -> IfElse_Stmt
+Statement -> Cond_Stmt
+Statement -> Assign_Stmt ; Statement
+Input_Stmt -> get id
+Output_Stmt -> put id
+Assign_Stmt -> id = expression Ternary
+Ternary -> epsilon
+Ternary -> relop expression ? expression : expression
+expression -> expression addsubop term
+expression -> term
+term -> term * factor
+term -> factor
+factor -> ( expression )
+factor -> id
+factor -> Numeral
+addsubop -> +
+addsubop -> -
+IfElse_Stmt -> if ( Condition ) then begin Statement end ElsePart Statement
+ElsePart -> else begin Statement end
+ElsePart -> epsilon
+Condition -> expression relop expression
+relop -> >
+relop -> <
+relop -> >=
+relop -> <=

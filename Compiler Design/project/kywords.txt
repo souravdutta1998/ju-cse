@@ -1,0 +1,14 @@
+integer
+real
+program
+uses
+const
+var
+function
+begin
+end
+get
+put
+if
+then
+else

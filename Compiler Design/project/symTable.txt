@@ -1,0 +1,17 @@
+project9 program  1
+crt uses  2
+xyz uses  2
+f1 constant  5
+gnum constant  6
+a1  var 9
+b2  var 9
+c3 integer var 9
+d1  var 10
+e2 real var 10
+myfunc function  12
+x real function 12
+y real function 12
+z integer function 12
+q2  var 14
+w2 integer var 14
+val1 real var 15
