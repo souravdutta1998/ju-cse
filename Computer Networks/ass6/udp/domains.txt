@@ -1,0 +1,5 @@
+google.com 127.65.13.5
+yahoo.com 154.165.55.45
+facebook.com 152.54.46.41
+bing.com 124.15.45.42
+amazon.in 111.15.154.18
