@@ -1,0 +1,10 @@
+D:\sd\ass1\1-sum-diff\1-sum-diff\bin\Debug\1-sum-diff.exe
+D:\sd\ass1\1-sum-diff\1-sum-diff\bin\Debug\1-sum-diff.pdb
+D:\sd\ass1\1-sum-diff\1-sum-diff\bin\Debug\1-sum-diff.xml
+D:\sd\ass1\1-sum-diff\1-sum-diff\obj\Debug\ResolveAssemblyReference.cache
+D:\sd\ass1\1-sum-diff\1-sum-diff\obj\Debug\_1_sum_diff.Resources.resources
+D:\sd\ass1\1-sum-diff\1-sum-diff\obj\Debug\1-sum-diff.vbproj.GenerateResource.Cache
+D:\sd\ass1\1-sum-diff\1-sum-diff\obj\Debug\1-sum-diff.exe
+D:\sd\ass1\1-sum-diff\1-sum-diff\obj\Debug\1-sum-diff.xml
+D:\sd\ass1\1-sum-diff\1-sum-diff\obj\Debug\1-sum-diff.pdb
+D:\sd\ass1\1-sum-diff\1-sum-diff\obj\Debug\_1_sum_diff.Form1.resources
