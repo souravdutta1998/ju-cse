@@ -1,0 +1,32 @@
+D:\sd\ass1\2-student\2-student\bin\Debug\2-student.exe
+D:\sd\ass1\2-student\2-student\bin\Debug\2-student.pdb
+D:\sd\ass1\2-student\2-student\bin\Debug\2-student.xml
+D:\sd\ass1\2-student\2-student\obj\Debug\ResolveAssemblyReference.cache
+D:\sd\ass1\2-student\2-student\obj\Debug\_2_student.Resources.resources
+D:\sd\ass1\2-student\2-student\obj\Debug\2-student.vbproj.GenerateResource.Cache
+D:\sd\ass1\2-student\2-student\obj\Debug\2-student.exe
+D:\sd\ass1\2-student\2-student\obj\Debug\2-student.xml
+D:\sd\ass1\2-student\2-student\obj\Debug\2-student.pdb
+D:\sd\ass1\2-student\2-student\obj\Debug\_2_student.Main.resources
+D:\sd\ass1\2-student\2-student\obj\Debug\_2_student.Form1.resources
+D:\sd\ass1\2-student\2-student\obj\Debug\_2_student.Add.resources
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\2-student.exe
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\2-student.xml
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\2-student.pdb
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\bin\Debug\2-student.exe
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\bin\Debug\2-student.pdb
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\bin\Debug\2-student.xml
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\_2_student.Add.resources
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\_2_student.Form1.resources
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\_2_student.Main.resources
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\_2_student.Resources.resources
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\2-student.vbproj.GenerateResource.Cache
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\_2_student.Display.resources
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\_2_student.Search.resources
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\_2_student.Edit.resources
+C:\Users\user_2\Documents\Visual Studio 2008\Projects\sd\ass1\2-student\2-student\obj\Debug\_2_student.Delete.resources
+D:\sd\ass1\2-student\2-student\obj\Debug\_2_student.Delete.resources
+D:\sd\ass1\2-student\2-student\obj\Debug\_2_student.Display.resources
+D:\sd\ass1\2-student\2-student\obj\Debug\_2_student.Edit.resources
+D:\sd\ass1\2-student\2-student\obj\Debug\_2_student.Search.resources
