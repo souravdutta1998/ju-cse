@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset="UTF-8">
+	<title>CHATROOM</title>
+</head>
+<body>
+	<h2>Welcome to my Chatroom!</h2>
+	<input type="text" onkeydown="enterKeyPressed(event)" placeholder="Your message here" id="text">
+	<button id="sendMessageButton">SEND TEXT MESSAGE</button>
+	<button id="sendImageButton">SEND IMAGE</button>
+	<div id="log"> </div>
+	
+	<script>
+		var username = prompt('What is your name?');
+		var sock = new WebSocket("ws://localhost:8080");
+		
+		var log = document.getElementById('log');
+		
+		function enterKeyPressed(evt) {
+			evt = evt || window.event;
+			if (evt.keyCode == 13) {
+				document.getElementById('text').value += '/';
+			}
+		}
+		sock.onopen = function() {
+			sock.send(JSON.stringify({
+				type: "username",
+				data: username
+			}));
+		}
+		
+		sock.onmessage = function() {
+			//console.log(event);
+			var json = JSON.parse(event.data);
+			if(json.type == "errormsg" && json.data == "DUPLICATE-CLIENT") {
+				alert("ERROR: DUPLICATE CLIENT USERNAME! Please try again with a different name");
+				return;
+			}
+			if(json.type == "username") {
+				if(json.data == username) {
+					log.innerHTML += "<h3>Welcome! Your username is "+username+"</h3>";
+				}
+				log.innerHTML += json.data+" joined the chatroom<br>";
+			}
+			else log.innerHTML += json.data+"<br>";
+		}
+		
+		document.getElementById("sendMessageButton").onclick = function() {
+			var Text = document.getElementById('text').value;
+			if(Text == "") {
+				alert("Please enter some text while sending text message");
+				return;
+			}
+			var newText = "";
+			for(var i=0;i<Text.length;i++) {
+				if(Text.charAt(i) == '/') {
+					newText += '<br>';
+				} else {
+					newText += Text.charAt(i);
+				}
+			}
+			log.innerHTML += "<b>You:</b> "+newText+"<br>";
+			sock.send(JSON.stringify({
+				type: "message",
+				data: newText
+			}));
+		};
+		
+		document.getElementById("sendImageButton").onclick = function() {
+			var Text = "<img src='"+document.getElementById('text').value+"'>";
+			if(Text == "<img src=''>") {
+				alert("Please enter a image url while sending text message");
+				return;
+			}			
+			log.innerHTML += "<b>You:</b> "+Text+"<br>";
+			sock.send(JSON.stringify({
+				type: "message",
+				data: Text
+			}));			
+		};
+		
+	</script>
+</body>
+</html>

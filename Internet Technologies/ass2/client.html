@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset="UTF-8">
+	<title>WebSocket client</title>
+</head>
+<body>
+
+	<input type="text" placeholder="Enter key here" id="putKeyText">
+	<input type="text" placeholder="Enter value here" id="putValueText">
+	<button id="putButton">SEND PUT REQUEST</button>
+	<br>
+	<br>
+	
+	<input type="text" placeholder="Enter key here" id="getKeyText">
+	<button id="getButton">SEND GET REQUEST</button>
+	<br>
+	<br>
+	
+	<button id="upgradeButton">UPGRADE TO MANAGER</button>
+	<button id="downgradeButton">DOWNGRADE TO GUEST</button>
+	<br>
+	<br>
+	
+	<div id="log"> </div>
+	
+	<script>
+		var clientId = prompt('What is your client id?');
+		
+		var sock = new WebSocket("ws://localhost:8080");
+		
+		sock.onopen = function() {
+			sock.send(JSON.stringify({
+				type: "clientId",
+				data: clientId
+			}));
+		}
+		
+		var log = document.getElementById('log');
+		
+		sock.onmessage = function(event) {
+			//console.log(event);
+			var json = JSON.parse(event.data);
+			if(json.type == "errormsg" && json.data == "DUPLICATE-CLIENT") {
+				alert("ERROR: DUPLICATE CLIENT ID! Please try again with a different id");
+				return;
+			}
+			log.innerHTML += json.data+"<br>";
+		}
+		
+		document.getElementById("putButton").onclick = function() {
+			var keyText = document.getElementById('putKeyText').value;
+			if(keyText == "") {
+				alert("Please enter key while sending PUT request");
+				return;
+			}
+			var valueText = document.getElementById('putValueText').value;
+			if(valueText == "") {
+				alert("Please enter value while sending PUT request");
+				return;
+			}
+			//log.innerHTML += "putmsg"+"<br>";
+			sock.send(JSON.stringify({
+				type: "PUT",
+				key: keyText,
+				value: valueText
+			}));
+		};		
+		
+		document.getElementById("getButton").onclick = function() {
+			var keyText = document.getElementById('getKeyText').value;
+			if(keyText == "") {
+				alert("Please enter key while sending PUT request");
+				return;
+			}
+			//log.innerHTML += "getmsg"+"<br>";
+			sock.send(JSON.stringify({
+				type: "GET",
+				key: keyText
+			}));
+		};
+		
+		document.getElementById("upgradeButton").onclick = function() {
+			sock.send(JSON.stringify({
+				type: "UPGRADE"
+			}));
+		};
+		
+		document.getElementById("downgradeButton").onclick = function() {
+			sock.send(JSON.stringify({
+				type: "DOWNGRADE"
+			}));
+		};
+	</script>
+	
+</body>
+</html>
